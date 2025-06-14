@@ -1,13 +1,19 @@
+from dotenv import load_dotenv
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from .models import Users
 from . import db
-import requests
 import os
+import requests
+
+# Load environment variables from .env file
+load_dotenv()
 
 main = Blueprint('main', __name__)
 
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+OPENROUTER_API_KEY = "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"
+
+
 
 @main.route('/')
 def home():
@@ -21,6 +27,8 @@ def chat():
 
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+        "HTTP-Referer": "http://localhost:5000",  # Replace with your actual frontend URL if deployed
+        "X-Title": "AI Chatter",
         "Content-Type": "application/json"
     }
 
@@ -41,8 +49,11 @@ def chat():
         response.raise_for_status()
         reply = response.json()["choices"][0]["message"]["content"]
         return jsonify({"reply": reply})
+    except requests.exceptions.HTTPError as http_err:
+        return jsonify({"reply": f"HTTP error: {http_err.response.text}"})
     except Exception as e:
         return jsonify({"reply": "something went wrong! please try again..."})
+
 
 @main.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -69,6 +80,7 @@ def signup():
 
     return render_template('signup.html')
 
+
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -87,6 +99,7 @@ def login():
             return redirect(url_for('main.login'))
 
     return render_template('login.html')
+
 
 @main.route('/logout')
 def logout():
