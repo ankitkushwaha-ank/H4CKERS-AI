@@ -11,7 +11,7 @@ load_dotenv()
 
 main = Blueprint('main', __name__)
 
-OPENROUTER_API_KEY = "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"
+OPENROUTER_API_KEY = "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"
 
 
 
