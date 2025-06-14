@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - H4CKERS AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}" />
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <h1 class="login-title">Welcome Back</h1>
+      <p class="login-subtitle">Login to continue with H4CKERS AI</p>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-messages">
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">
+                <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <form class="login-form" method="POST" action="{{ url_for('main.login') }}">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" placeholder="you@example.com" required />
+
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" placeholder="••••••••" required />
+
+        <button type="submit" class="login-btn">Login</button>
+        <div class="login-footer">
+          <span>Don't have an account?</span>
+          <a href="{{ url_for('main.signup') }}">Sign up</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

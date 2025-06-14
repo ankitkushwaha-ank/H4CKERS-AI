@@ -1,0 +1,306 @@
+/* Reset & Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: radial-gradient(circle at top left, #12151c, #0c0e13);
+  color: #fff;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+}
+
+/* Header */
+.chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid #1f1f1f;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chat-header h1 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Dropdown */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-btn {
+  background: #272d3a;
+  border: none;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.dropdown-btn:hover {
+  background: #343946;
+}
+
+.dropdown-content {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 36px;
+  left: 0;
+  background: #1a1d23;
+  border: 1px solid #2d2f33;
+  border-radius: 10px;
+  padding: 10px;
+  z-index: 10;
+  width: 160px;
+}
+
+.dropdown-content.open {
+  display: flex;
+}
+
+.dropdown-content button {
+  background: transparent;
+  border: none;
+  color: #fff;
+  padding: 8px 10px;
+  text-align: left;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.dropdown-content button:hover {
+  background: #2d313a;
+}
+
+/* User Icon */
+.user-icon img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 1px solid #444;
+}
+
+/* Chat Area */
+.chat-body {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  padding: 32px 0;
+}
+
+.chat-history {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 700px;
+  padding: 0 24px;
+}
+
+.message {
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 15px;
+  line-height: 1.4;
+  animation: fadeIn 0.3s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.message.user {
+  background: #1e2533;
+  align-self: flex-end;
+}
+
+.message.ai {
+  background: #272d3a;
+  align-self: flex-start;
+}
+
+/* Chat Input */
+.chat-input-area {
+  position: absolute;
+  bottom: 24px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.chat-form {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid #2d2f38;
+  border-radius: 16px;
+  display: flex;
+  width: 100%;
+  max-width: 700px;
+  padding: 8px 12px;
+  pointer-events: all;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.chat-form input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 15px;
+  padding: 12px;
+  outline: none;
+}
+
+.send-btn {
+  background: #6c63ff;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 12px;
+  margin-left: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.send-btn:hover {
+  background: #584ce5;
+}
+
+/* Scroll & Animation */
+.chat-body::-webkit-scrollbar {
+  display: none;
+}
+.chat-body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+    /* Inline style additions for dropdowns and auth */
+.user-auth {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.auth-btn {
+  padding: 8px 12px;
+  background-color: #272d3a;
+  color: #d7d7d7;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.user-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.user-dropdown {
+  display: none;
+  position: absolute;
+  right: 10px;
+  top: 60px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 10px;
+  z-index: 1000;
+  min-width: 150px;
+}
+
+.user-dropdown.open {
+  display: block;
+}
+
+.user-dropdown p {
+  margin: 0;
+  font-weight: 600;
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+  color: white;
+  margin-left: 7px;
+}
+
+.user-dropdown a {
+  display: block;
+  padding: 8px;
+  text-decoration: none;
+  color: white;
+}
+
+.user-dropdown a:hover {
+  background-color: #000;
+}
+
+.user-menu {
+  position: relative;
+}
+
+.dropdown-content.open {
+  display: block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 40px;
+  left: 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 10px;
+}
+
+.dropdown-content button {
+  display: block;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 8px 10px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.dropdown-content button:hover {
+  background-color: #000;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-btn {
+  border: none;
+  cursor: pointer;
+}

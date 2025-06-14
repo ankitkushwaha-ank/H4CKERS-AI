@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up - H4CKERS AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='signup.css') }}" />
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="signup-container">
+    <div class="signup-card">
+      <h1 class="signup-title">Create Your Account</h1>
+      <p class="signup-subtitle">Start your journey with H4CKERS AI</p>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-messages">
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">
+                <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+
+      <form class="signup-form" method="POST" action="{{ url_for('main.signup') }}">
+        <label for="username">Full Name</label>
+        <input type="text" id="username" name="username" placeholder="Adarsh Kushwaha" required />
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required />
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Create a password" required />
+
+        <button type="submit" class="signup-btn">Sign Up</button>
+        <div class="signup-footer">
+          <span>Already have an account?</span>
+          <a href="{{ url_for('main.login') }}">Login</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
