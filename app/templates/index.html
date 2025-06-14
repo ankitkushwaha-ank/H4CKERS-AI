@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>H4CKERS AI</title>
+  <link rel="stylesheet" href="/static/style2.css" />
+  <link rel="icon" href="/static/img/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="chat-header">
+      <div class="header-left">
+        <h1>H4CKERS AI</h1>
+        <div class="dropdown">
+          <button onclick="toggleMenu()" class="dropdown-btn">
+            <img style="height:10px;" src="/static/img/down.png" alt="arrow" />
+          </button>
+          <div class="dropdown-content" id="dropdownMenu">
+            <button>New Chat</button>
+            <button>Clear Chat</button>
+            <button>Export</button>
+            <button>Settings</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Conditional login/logout -->
+      <div class="user-auth">
+        {% if session.get('user_id') %}
+        <div class="user-menu">
+          <img src="/static/img/default.png" alt="User" class="user-icon" onclick="toggleUserMenu()" />
+          <div id="userDropdown" class="user-dropdown">
+            <p>{{ session.get('username') }}</p>
+            <a href="{{ url_for('main.login') }}">Switch User</a>
+            <a href="{{ url_for('main.logout') }}">Log out</a>
+          </div>
+        </div>
+        {% else %}
+        <a href="{{ url_for('main.login') }}" class="auth-btn">Login</a>
+        <a href="{{ url_for('main.signup') }}" class="auth-btn">Sign Up</a>
+        {% endif %}
+      </div>
+    </header>
+
+    <!-- Chat -->
+    <main class="chat-body">
+      <div class="chat-history" id="chatHistory">
+        <div class="message ai">Welcome to H4CKERS AI! Ask me anything.</div>
+      </div>
+    </main>
+
+    <!-- Input -->
+    <div class="chat-input-area">
+      <form class="chat-form" id="chatForm">
+        <input type="text" id="userInput" placeholder="Type a message..." required />
+        <button type="submit" class="send-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById("dropdownMenu").classList.toggle("open");
+    }
+
+    function toggleUserMenu() {
+      document.getElementById("userDropdown").classList.toggle("open");
+    }
+
+    window.onclick = function(e) {
+      if (!e.target.closest('.dropdown') && !e.target.closest('.user-menu')) {
+        document.getElementById("dropdownMenu")?.classList.remove("open");
+        document.getElementById("userDropdown")?.classList.remove("open");
+      }
+    }
+
+    // Chat logic
+    const form = document.getElementById('chatForm');
+    const input = document.getElementById('userInput');
+    const history = document.getElementById('chatHistory');
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const userMessage = input.value.trim();
+      if (!userMessage) return;
+
+      // Append user message
+      const userDiv = document.createElement('div');
+      userDiv.className = 'message user';
+      userDiv.textContent = userMessage;
+      history.appendChild(userDiv);
+      input.value = '';
+
+      // Auto-scroll
+      history.scrollTop = history.scrollHeight;
+
+      try {
+        const res = await fetch('/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: userMessage })
+        });
+        const data = await res.json();
+        const aiDiv = document.createElement('div');
+        aiDiv.className = 'message ai';
+        aiDiv.textContent = data.reply || "No response from AI.";
+        history.appendChild(aiDiv);
+        history.scrollTop = history.scrollHeight;
+      } catch (err) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'message ai';
+        errorDiv.textContent = 'Something went wrong, pls try again :)';
+        history.appendChild(errorDiv);
+      }
+    });
+  </script>
+</body>
+</html>
