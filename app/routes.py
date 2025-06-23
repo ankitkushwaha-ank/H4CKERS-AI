@@ -7,17 +7,18 @@ import os
 
 main = Blueprint('main', __name__)
 
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
-@main.route('/')
-def home():
-    return render_template('index.html')
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 @main.route('/chat', methods=['POST'])
 def chat():
     user_message = request.json.get('message')
+
     if not user_message:
-        return jsonify({"reply": "No input provided"})
+        return jsonify({"reply": "No input provided"}), 400
+
+    if not OPENROUTER_API_KEY:
+        return jsonify({"reply": "Error: API key is not set."}), 500
 
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
@@ -41,8 +42,16 @@ def chat():
         response.raise_for_status()
         reply = response.json()["choices"][0]["message"]["content"]
         return jsonify({"reply": reply})
+    except requests.exceptions.HTTPError as http_err:
+        return jsonify({"reply": f"HTTP error occurred: {http_err}"}), 500
     except Exception as e:
-        return jsonify({"reply": "something went wrong! please try again..."})
+        return jsonify({"reply": f"Error: {str(e)}"}), 500
+
+
+@main.route('/')
+def home():
+    return render_template('index.html')
+
 
 @main.route('/signup', methods=['GET', 'POST'])
 def signup():
